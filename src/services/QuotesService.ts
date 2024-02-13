@@ -4,26 +4,22 @@ export interface Quote {
   quote: string;
   author: string;
 }
-// Wraps calling the backend http API to get quotes.
-export const getAllQuotes = async (): Promise<Quote[]> => {
-  const quotesUrl = process.env.REACT_APP_QUOTES_URL;
 
-  if (!quotesUrl) {
-    throw new Error("REACT_APP_QUOTES_URL environment variable is not set.");
+export async function getAllQuotes(): Promise<Quote[]> {
+  const url = process.env.REACT_APP_QUOTES_URL;
+  if (!url) {
+    throw new Error('REACT_APP_QUOTES_URL is not set.');
   }
 
-  const requestConfig = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  const response = await fetch(
-    quotesUrl + "/quotes",
-    requestConfig
-  );
-  if (!response.ok) {
-    throw new Error(`Error code: ${response.status}`);
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Error fetching quotes: ${response.status}`);
+    }
+    const data = await response.json();
+    return data.quotes;
+  } catch (error) {
+    console.error(error);
+    return [];
   }
-  return response.json();
-};
+}
