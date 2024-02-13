@@ -6,6 +6,12 @@ export interface Quote {
 }
 // Wraps calling the backend http API to get quotes.
 export const getAllQuotes = async (): Promise<Quote[]> => {
+  const quotesUrl = process.env.REACT_APP_QUOTES_URL;
+
+  if (!quotesUrl) {
+    throw new Error("REACT_APP_QUOTES_URL environment variable is not set.");
+  }
+
   const requestConfig = {
     method: "GET",
     headers: {
@@ -13,7 +19,7 @@ export const getAllQuotes = async (): Promise<Quote[]> => {
     },
   };
   const response = await fetch(
-    "http://localhost:8083/quotes",
+    quotesUrl + "/quotes",
     requestConfig
   );
   if (!response.ok) {

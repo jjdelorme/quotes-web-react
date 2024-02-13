@@ -7,19 +7,21 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 
-export default function Home() {
-  const [quotes, setQuotes] = useState<Quote[]>([]);
+export async function getServerSideProps() {
+  // Fetch data from external API
+  const quotes = await getAllQuotes();
 
-  useEffect(() => {
-    getAllQuotes().then((data) => setQuotes(data));
-  }, []);
+  // Pass data to the page via props
+  return { props: { quotes } };
+}
 
+export default function Home(props: { quotes: Quote[] }) {
   return (
     <>
       <AppBar className={styles.appBar} position="static">Quotes</AppBar>
       <Grid container spacing={4} className={styles.grid}>
-        {quotes.map((quote) => (
-          <Grid item xs={4}>
+        {props.quotes.map((quote) => (
+          <Grid item xs={4} key={quote.id}>
             <Card>
               <CardHeader subheader={quote.author} />
               <CardContent>{quote.quote}</CardContent>
@@ -30,3 +32,4 @@ export default function Home() {
     </>
   );
 }
+
