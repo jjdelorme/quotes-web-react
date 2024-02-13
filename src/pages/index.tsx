@@ -1,33 +1,32 @@
+import { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import styles from "@/styles/Home.module.css";
-import { Quote } from "@/services/QuotesService";
-
-// Sample quotes
-const quotes : Quote[] = [
-  {
-    id: "0",
-    quote: "It's not how much you have, but how much you enjoy that makes happiness.",
-    author: "Charles Spurgeon",
-  },
-  {
-    id: "1",
-    quote: "The greatest glory in living lies not in never falling, but in rising every time we fall.",
-    author: "Nelson Mandela",
-  },
-  {
-    id: "2",
-    quote: "The only person you are destined to become is the person you decide to be.",
-    author: "Ralph Waldo Emerson",
-  }
-];
+import { Quote, getAllQuotes } from "@/services/QuotesService";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
 
 export default function Home() {
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+
+  useEffect(() => {
+    getAllQuotes().then((data) => setQuotes(data));
+  }, []);
+
   return (
     <>
       <AppBar className={styles.appBar} position="static">Quotes</AppBar>
-      {quotes.map((quote) => (
-        <div key="{quote.id}">{quote.quote}, {quote.author}</div>
-      ))}
+      <Grid container spacing={4} className={styles.grid}>
+        {quotes.map((quote) => (
+          <Grid item xs={4}>
+            <Card>
+              <CardHeader subheader={quote.author} />
+              <CardContent>{quote.quote}</CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </>
   );
 }
