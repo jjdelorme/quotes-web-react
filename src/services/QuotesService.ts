@@ -6,18 +6,18 @@ export interface Quote {
 }
 
 export async function getAllQuotes(): Promise<Quote[]> {
-  const url = process.env.REACT_APP_QUOTES_URL;
+  const url = process.env.NEXT_PUBLIC_QUOTES_URL;
   if (!url) {
-    throw new Error('REACT_APP_QUOTES_URL is not set.');
+    throw new Error('NEXT_PUBLIC_QUOTES_URL is not set.');
   }
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url + '/quotes');
     if (!response.ok) {
       throw new Error(`Error fetching quotes: ${response.status}`);
     }
     const data = await response.json();
-    return data.quotes;
+    return data;
   } catch (error) {
     console.error(error);
     return [];
