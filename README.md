@@ -28,5 +28,5 @@ The easiest way to deploy your Next.js app to Google Cloud Run is to use the fol
 ```
 gcloud run deploy react-quotes --source=. --region=us-central1 \ 
 --allow-unauthenticated \
---set-env-vars=REACT_APP_QUOTES_URL=$REACT_APP_QUOTES_URL
+--set-env-vars=NEXT_PUBLIC_QUOTES_URL=$NEXT_PUBLIC_QUOTES_URL
 ```
